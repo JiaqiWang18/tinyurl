@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-depl
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-depl
+  template:
+    metadata:
+      labels:
+        app: gateway-depl
+    spec:
+      containers:
+        - name: gateway-depl
+          image: jiaqiwang118/url-gateway-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-depl
+  labels:
+    app: gateway-depl
+spec:
+  ports:
+    - port: 88
+      protocol: TCP
+  selector:
+    app: gateway-depl

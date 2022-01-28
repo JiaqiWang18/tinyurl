@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hash-depl
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hash-depl
+  template:
+    metadata:
+      labels:
+        app: hash-depl
+    spec:
+      containers:
+        - name: hash-depl
+          image: jiaqiwang118/url-hash-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hash-depl
+  labels:
+    app: hash-depl
+spec:
+  ports:
+    - port: 8001
+      protocol: TCP
+  selector:
+    app: hash-depl

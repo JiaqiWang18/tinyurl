@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: shortener-depl
+  data:
+    mongodb:
+      uri: ${mongouri}
+      database: url-shortener
+server:
+  port: 8000
+eureka:
+  client:
+    register-with-eureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

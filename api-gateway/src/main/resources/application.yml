@@ -1,0 +1,22 @@
+server:
+  port: 88
+spring:
+  application:
+    name: gateway-depl
+  cloud:
+    gateway:
+      routes:
+        - id: shortener-depl
+          uri: lb://shortener-depl
+          predicates:
+            - Path=/**
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+eureka:
+  client:
+    register-with-eureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

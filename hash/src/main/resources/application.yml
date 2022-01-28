@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: hash-depl
+  data:
+    mongodb:
+      uri: ${mongouri}
+      database: url-shortener
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
+server:
+  port: 8001
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetchRegistry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

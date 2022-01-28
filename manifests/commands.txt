@@ -1,0 +1,11 @@
+mvn clean package
+docker buildx build --platform linux/amd64 -t jiaqiwang118/url-hash-service:latest .
+docker push jiaqiwang118/url-hash-service
+
+mvn clean package
+docker buildx build --platform linux/amd64 -t jiaqiwang118/url-shortener-service:latest .
+docker push jiaqiwang118/url-shortener-service
+
+mvn clean package
+docker buildx build --platform linux/amd64 -t jiaqiwang118/url-gateway-service:latest .
+docker push jiaqiwang118/url-gateway-service

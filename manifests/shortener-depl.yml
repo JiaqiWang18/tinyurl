@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shortener-depl
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shortener-depl
+  template:
+    metadata:
+      labels:
+        app: shortener-depl
+    spec:
+      containers:
+        - name: shortener-depl
+          image: jiaqiwang118/url-shortener-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shortener-depl
+  labels:
+    app: shortener-depl
+spec:
+  ports:
+    - port: 8000
+      protocol: TCP
+  selector:
+    app: shortener-depl
