@@ -1,26 +1,37 @@
 package com.jwang.shortener.controller;
 
 import com.jwang.shortener.service.UrlService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/")
 public class UrlController {
 
-    @Autowired
-    UrlService urlService;
+    private UrlService urlService;
+
+    public UrlController(UrlService urlService){
+        this.urlService = urlService;
+    }
 
     @GetMapping("/{hash}")
     public RedirectView redirectView(@PathVariable String hash){
         String originalUrl = urlService.retrieveOriginalUrl(hash);
+        if(originalUrl == null){
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "404 url not found"
+            );
+        }
         return new RedirectView(originalUrl);
     }
 
+    @ResponseBody
     @PostMapping("/url/generate")
     public Map<String, Object> createShortUrl(@RequestBody Map<String, String> reqBody){
         String originalUrl = reqBody.get("original");

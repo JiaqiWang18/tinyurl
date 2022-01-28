@@ -2,12 +2,14 @@ package com.jwang.shortener.service;
 
 import com.jwang.shortener.model.UrlEntity;
 import com.jwang.shortener.repository.UrlRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
+@Slf4j
 @Service
 public class UrlService {
     @Autowired
@@ -16,23 +18,24 @@ public class UrlService {
     @Autowired
     HashFeignService hashFeignService;
 
-    Logger logger = LoggerFactory.getLogger(UrlService.class);
-
     @Transactional
     public String generateShortenUrl(String originalUrl){
-        logger.info("Start generateShortenUrl");
+        log.info("Start generateShortenUrl");
         String hash = (String) hashFeignService.retrieve().get("data");
-        logger.info("Retrieved a hash from hash service: "+hash);
+        log.info("Retrieved a hash from hash service: "+hash);
         urlRepository.save(new UrlEntity(hash, originalUrl));
-        logger.info("Saved hash and original to db");
+        log.info("Saved hash and original to db");
         return hash;
     }
 
     @Transactional
     public String retrieveOriginalUrl(String hash){
-        logger.info("Start retrieveOriginalUrl");
-        String originalUrl = urlRepository.findById(hash).get().getOriginalUrl();
-        logger.info("Found original Url " + originalUrl);
-        return originalUrl;
+        log.info("Start retrieveOriginalUrl");
+        Optional<UrlEntity> urlEntity = urlRepository.findById(hash);
+        if(urlEntity.isPresent()){
+            log.info("Found original Url");
+            return urlEntity.get().getOriginalUrl();
+        }
+        return null;
     }
 }
