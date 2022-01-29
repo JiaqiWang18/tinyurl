@@ -16,6 +16,12 @@ spec:
       containers:
         - name: hash-depl
           image: jiaqiwang118/url-hash-service
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongouri
+                  key: uri
 ---
 apiVersion: v1
 kind: Service

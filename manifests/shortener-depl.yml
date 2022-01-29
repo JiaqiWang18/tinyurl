@@ -16,6 +16,12 @@ spec:
       containers:
         - name: shortener-depl
           image: jiaqiwang118/url-shortener-service
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongouri
+                  key: uri
 ---
 apiVersion: v1
 kind: Service
