@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("/url")
 @RestController
+@RequestMapping("/url")
 public class UrlController {
 
     private UrlService urlService;
@@ -36,8 +36,17 @@ public class UrlController {
     @PostMapping("/generate")
     public Map<String, Object> createShortUrl(@RequestBody Map<String, String> reqBody){
         String originalUrl = reqBody.get("original");
-        String shortenUrl = urlService.generateShortenUrl(originalUrl);
+        String shortenUrl;
         Map<String, Object> res = new HashMap<>();
+
+        if(reqBody.containsKey("hash")){
+            shortenUrl = urlService.customizeShortenUrl(originalUrl, reqBody.get("hash"));
+            if(shortenUrl==null){
+                res.put("error", "url in use");
+            }
+        }else{
+            shortenUrl = urlService.generateShortenUrl(originalUrl);
+        }
         res.put("data", shortenUrl);
         return res;
     }

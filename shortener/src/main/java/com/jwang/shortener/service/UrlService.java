@@ -29,6 +29,20 @@ public class UrlService {
     }
 
     @Transactional
+    public String customizeShortenUrl(String originalUrl, String hash){
+        log.info("Start customizeShortenUrl");
+        // if hash exists, it has been used
+        if(urlRepository.existsById(hash)){
+            return null;
+        }else{
+            urlRepository.save(new UrlEntity(hash, originalUrl));
+            // call hash service to mark this url as used and remove it if it has been auto generated
+            hashFeignService.markHashAsUsed(hash);
+            return hash;
+        }
+    }
+
+    @Transactional
     public String retrieveOriginalUrl(String hash){
         log.info("Start retrieveOriginalUrl");
         Optional<UrlEntity> urlEntity = urlRepository.findById(hash);

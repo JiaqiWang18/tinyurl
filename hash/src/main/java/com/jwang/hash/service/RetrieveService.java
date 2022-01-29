@@ -4,12 +4,12 @@ import com.jwang.hash.model.UsedHashEntity;
 import com.jwang.hash.repository.HashRepository;
 import com.jwang.hash.repository.UsedHashRepository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class RetrieveService {
 
@@ -19,8 +19,6 @@ public class RetrieveService {
     @Autowired
     UsedHashRepository usedHashRepository;
 
-    Logger logger = LoggerFactory.getLogger(GeneratorService.class);
-
 
     /**
      * Synchronized method that retrieves a hash from unused db, removes it, and adds it to used hash
@@ -28,12 +26,21 @@ public class RetrieveService {
      */
     @Transactional
     public synchronized String retrieveOne(){
-        logger.info("start to retrieve a hash");
+        log.info("start to retrieve a hash");
         String retrievedHash = hashRepository.findAll().get(0).getHash();
-        logger.info("retrieved hash: "+retrievedHash);
+        log.info("retrieved hash: "+retrievedHash);
         usedHashRepository.save(new UsedHashEntity(retrievedHash));
         hashRepository.deleteById(retrievedHash);
-        logger.info("retrieved hash removed from unused");
+        log.info("retrieved hash removed from unused");
         return retrievedHash;
+    }
+
+    @Transactional
+    public synchronized void markHashAsUsed(String hash){
+        log.info("start markHashAsUsed ");
+        if(hashRepository.existsById(hash)){
+            hashRepository.deleteById(hash);
+        }
+        usedHashRepository.save(new UsedHashEntity(hash));
     }
 }
