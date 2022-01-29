@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("/")
+@RequestMapping("/url")
 @RestController
 public class UrlController {
 
@@ -22,7 +22,7 @@ public class UrlController {
         this.urlService = urlService;
     }
 
-    @GetMapping("/{hash}")
+    @GetMapping("/retrieve/{hash}")
     public Map<String, Object> retrieveOriginal(@PathVariable String hash){
         String originalUrl = urlService.retrieveOriginalUrl(hash);
         Map<String, Object> res = new HashMap<>();
@@ -33,7 +33,7 @@ public class UrlController {
         return res;
     }
 
-    @PostMapping("/url/generate")
+    @PostMapping("/generate")
     public Map<String, Object> createShortUrl(@RequestBody Map<String, String> reqBody){
         String originalUrl = reqBody.get("original");
         String shortenUrl = urlService.generateShortenUrl(originalUrl);
