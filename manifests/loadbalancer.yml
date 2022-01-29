@@ -5,8 +5,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: 88
+    - port: 3000
+      targetPort: 3000
       protocol: TCP
   selector:
-    app: gateway-depl
+    app: frontend-depl
