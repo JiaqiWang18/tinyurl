@@ -1,0 +1,20 @@
+name: deploy-manifests-depls
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'manifests/depls/**'
+jobs:
+  deploy-manifests-depls:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: url-shortener-339504
+      - run: gcloud container clusters get-credentials url-shortener --zone=us-central1-c
+      - run: kubectl apply -f manifests/depls
