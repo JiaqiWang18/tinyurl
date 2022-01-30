@@ -5,13 +5,22 @@ spring:
     name: gateway-depl
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+        add-to-simple-url-handler-mapping: true
       routes:
         - id: shortener-depl
           uri: lb://shortener-depl
           predicates:
             - Path=/**
-          filters:
-            - RewritePath=/api(?<segment>/?.*), $\{segment}
+#          filters:
+#            - RewritePath=/api(?<segment>/?.*), $\{segment}
       discovery:
         locator:
           enabled: true
