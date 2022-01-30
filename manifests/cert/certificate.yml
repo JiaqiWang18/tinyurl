@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tinyurl-jackywang-us-tls
+  namespace: default
+spec:
+  secretName: tinyurl-jackywang-us
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: tinyurl.jackywang.us
+  dnsNames:
+    - tinyurl.jackywang.us
