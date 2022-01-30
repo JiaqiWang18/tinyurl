@@ -1,0 +1,51 @@
+name: Build and Deploy Frontend to GKE
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'frontend/**'
+
+env:
+  PROJECT_ID: url-shortener-339504
+  GKE_CLUSTER: url-shortener # Add your cluster name here.
+  GKE_ZONE: us-central1-c # Add your cluster zone here.
+  DEPLOYMENT_NAME: url-shortener # Add your deployment name here.
+  IMAGE: static-site
+
+jobs:
+  deploy-frontend:
+    name: Deploy Frontend Service
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Init gcloud CLI
+        uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: url-shortener-339504
+
+      - name: Config Docker
+        run: gcloud --quiet auth configure-docker
+
+      - name: Build Docker Container
+        run: |-
+          cd frontend && docker build -t jiaqiwang118/url-frontend .
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub
+        run: docker push jiaqiwang118/url-frontend
+
+      - name: Deploy to GKE
+        run: |-
+          gcloud container clusters get-credentials url-shortener --zone=us-central1-c
+          kubectl rollout restart deployment/frontend-depl
+          k get deployments -o wide
