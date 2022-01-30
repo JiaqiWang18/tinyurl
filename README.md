@@ -1,2 +1,2 @@
 # TinyURL
-http://tinyurl.jackywang.us/app
+https://tinyurl.jackywang.us/app
