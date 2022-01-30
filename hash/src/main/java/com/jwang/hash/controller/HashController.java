@@ -1,7 +1,6 @@
 package com.jwang.hash.controller;
 
 import com.jwang.hash.service.RetrieveService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -11,8 +10,11 @@ import java.util.Map;
 @RequestMapping("/hash")
 public class HashController {
 
-    @Autowired
-    RetrieveService retrieveService;
+    private final RetrieveService retrieveService;
+
+    public HashController(RetrieveService retrieveService) {
+        this.retrieveService = retrieveService;
+    }
 
     @GetMapping("/retrieve")
     public Map<String, Object> retrieve(){
