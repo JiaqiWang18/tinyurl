@@ -14,7 +14,7 @@ export default function UrlForm() {
   const [shortenedUrl, setShortenedUrl] = React.useState<string>("error");
 
   const { doRequest, errors, isFetching } = useRequest({
-    url: "http://tinyurl.jackywang.us/url/generate",
+    url: "/url/generate",
     method: "post",
     body: {
       original: originalUrl,
