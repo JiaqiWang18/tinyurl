@@ -10,5 +10,9 @@ mvn clean package
 docker buildx build --platform linux/amd64 -t jiaqiwang118/url-gateway-service:latest .
 docker push jiaqiwang118/url-gateway-service
 
+mvn clean package
+docker buildx build --platform linux/amd64 -t jiaqiwang118/url-schedule-service:latest .
+docker push jiaqiwang118/url-schedule-service
+
 docker buildx build --platform linux/amd64 -t jiaqiwang118/url-frontend:latest .
 docker push jiaqiwang118/url-frontend:latest

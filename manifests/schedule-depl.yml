@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schedule-depl
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: schedule-depl
+  template:
+    metadata:
+      labels:
+        app: schedule-depl
+    spec:
+      containers:
+        - name: schedule-depl
+          image: jiaqiwang118/url-schedule-service
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongouri
+                  key: uri
