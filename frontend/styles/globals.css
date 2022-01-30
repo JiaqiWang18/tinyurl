@@ -14,3 +14,30 @@ a {
 * {
   box-sizing: border-box;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: rgb(0, 34, 77, 0.95);
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  width: 450px;
+  border-radius: 1rem;
+}
+
+.form .form__custom-button {
+  margin-top: 50px;
+}
