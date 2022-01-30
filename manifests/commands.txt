@@ -9,3 +9,6 @@ docker push jiaqiwang118/url-shortener-service
 mvn clean package
 docker buildx build --platform linux/amd64 -t jiaqiwang118/url-gateway-service:latest .
 docker push jiaqiwang118/url-gateway-service
+
+docker buildx build --platform linux/amd64 -t jiaqiwang118/url-frontend:latest .
+docker push jiaqiwang118/url-frontend:latest

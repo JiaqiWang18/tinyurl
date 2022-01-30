@@ -18,6 +18,13 @@ spec:
                 name: frontend-depl
                 port:
                   number: 3000
+          - path: /_next/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-depl
+                port:
+                  number: 3000
           - path: /?(.*)
             pathType: Prefix
             backend:
