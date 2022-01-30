@@ -33,7 +33,7 @@ jobs:
       - name: Config Docker
         run: gcloud --quiet auth configure-docker
 
-      - name: Build Docker Container
+      - name: Build Docker Image
         run: |-
           cd frontend && docker build -t jiaqiwang118/url-frontend .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
@@ -48,4 +48,4 @@ jobs:
         run: |-
           gcloud container clusters get-credentials url-shortener --zone=us-central1-c
           kubectl rollout restart deployment/frontend-depl
-          k get deployments -o wide
+          kubectl get deployments -o wide
