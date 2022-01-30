@@ -81,7 +81,7 @@ export default function UrlForm() {
             <div className="form-group my-3">
               <TextField
                 id="outlined-basic"
-                label="Custom Alias"
+                label="Custom Alias (Optional)"
                 variant="standard"
                 value={alias}
                 onChange={(e) => {
@@ -103,7 +103,7 @@ export default function UrlForm() {
       <DialogPopup
         open={dialogOpen}
         handleClose={handleDialogClose}
-        title="Your shortened URL"
+        title="Your tiny url"
         content={renderedDialogContent}
       />
     </div>
