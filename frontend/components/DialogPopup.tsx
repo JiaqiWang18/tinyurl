@@ -5,11 +5,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 
 interface AlertDialogProps {
   open: boolean;
   handleClose: any;
-  content: string | null;
+  content: JSX.Element;
   title: string | null;
 }
 
@@ -20,12 +21,13 @@ export default function AlertDialog({
   title,
 }: AlertDialogProps) {
   return (
-    <div>
+    <div className="w-75">
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth
       >
         <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
         <DialogContent>

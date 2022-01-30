@@ -4,13 +4,14 @@ import useRequest from "../hooks/use-request";
 import { Button, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import DialogPopup from "./DialogPopup";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export default function UrlForm() {
   const [originalUrl, setUrl] = React.useState("");
   const [alias, setAlias] = React.useState<string>("");
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [shortenedUrl, setShortenedUrl] = React.useState<string | null>(null);
+  const [shortenedUrl, setShortenedUrl] = React.useState<string>("error");
 
   const { doRequest, errors, isFetching } = useRequest({
     url: "http://tinyurl.jackywang.us/url/generate",
@@ -33,9 +34,31 @@ export default function UrlForm() {
     setDialogOpen(false);
   };
 
+  const renderedDialogContent = (
+    <div>
+      <CopyToClipboard text={shortenedUrl}>
+        <button
+          className="btn mt-2"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="copy"
+        >
+          <h5>
+            {shortenedUrl} <i className="fas fa-copy"></i>
+          </h5>
+        </button>
+      </CopyToClipboard>
+    </div>
+  );
+
   return (
-    <div className="justify-content-center align-self-center mx-auto">
+    <div className="justify-content-center align-self-center mx-auto mb-5">
       <div className="form">
+        <div className="mb-3">
+          <h1 className="">
+            TinyURL <i className="fas fa-link"></i>
+          </h1>
+        </div>
         {isFetching ? (
           <div className="mx-auto my-5">
             <CircularProgress />
@@ -81,7 +104,7 @@ export default function UrlForm() {
         open={dialogOpen}
         handleClose={handleDialogClose}
         title="Your shortened URL"
-        content={shortenedUrl}
+        content={renderedDialogContent}
       />
     </div>
   );
