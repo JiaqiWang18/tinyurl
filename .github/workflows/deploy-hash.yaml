@@ -1,4 +1,4 @@
-name: Build and Deploy shortener service to GKE
+name: Build and Deploy hash service to GKE
 
 on:
   push:

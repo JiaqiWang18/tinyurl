@@ -1,11 +1,11 @@
-name: Build and Deploy shortener service to GKE
+name: Build and Deploy gateway service to GKE
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'gateway/**'
+      - 'api-gateway/**'
 
 env:
   PROJECT_ID: url-shortener-339504
