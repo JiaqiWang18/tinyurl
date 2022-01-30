@@ -30,7 +30,7 @@ jobs:
           java-version: 1.8
 
       - name: Build Jar
-        run: mvn clean package
+        run: cd shortener && mvn clean package
 
       - name: Init gcloud CLI
         uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
