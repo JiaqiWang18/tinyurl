@@ -2,6 +2,7 @@ package com.jwang.shortener.controller;
 
 import com.jwang.shortener.service.UrlService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.tomcat.jni.Local;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/")
 public class UrlController {
@@ -35,6 +37,7 @@ public class UrlController {
     public RedirectView retrieveOriginal(@PathVariable String hash){
         String originalUrl = urlService.retrieveOriginalUrl(hash);
         if(originalUrl == null){
+            log.info("has not found");
             return new RedirectView("/error/url-not-found");
         }
         return new RedirectView(originalUrl);
