@@ -38,7 +38,7 @@ public class UrlController {
         String originalUrl = urlService.retrieveOriginalUrl(hash);
         if(originalUrl == null){
             log.info("has not found");
-            return new RedirectView("/error/url-not-found");
+            return new RedirectView("https://tinyurl.jackywang.us/error/url-not-found");
         }
         return new RedirectView(originalUrl);
     }
