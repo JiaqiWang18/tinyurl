@@ -43,3 +43,24 @@ a {
 .btn:focus {
   box-shadow: none;
 }
+
+.MuiPaper-root {
+  box-shadow: none;
+}
+
+.MuiButtonBase-root {
+  padding: auto !important;
+}
+
+.MuiAccordionDetails-root {
+  padding: none;
+}
+
+.MuiAccordionSummary-expandIconWrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.MuiAccordionSummary-content {
+  width: 100%;
+}

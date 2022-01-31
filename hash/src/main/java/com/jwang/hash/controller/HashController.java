@@ -32,6 +32,14 @@ public class HashController {
         return result;
     }
 
+    @GetMapping("/unused/{hash}")
+    public Map<String, Object> markHashAsUnUsed(@PathVariable("hash") String hash){
+        Map<String, Object> result = new HashMap<>();
+        retrieveService.markHashAsUnused(hash);
+        result.put("status",200);
+        return result;
+    }
+
     @GetMapping("/")
     public String test(){
         return "hash service";

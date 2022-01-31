@@ -1,5 +1,6 @@
 package com.jwang.hash.service;
 
+import com.jwang.hash.model.HashEntity;
 import com.jwang.hash.model.UsedHashEntity;
 import com.jwang.hash.repository.HashRepository;
 import com.jwang.hash.repository.UsedHashRepository;
@@ -61,5 +62,12 @@ public class RetrieveService {
             hashRepository.deleteById(hash);
         }
         usedHashRepository.save(new UsedHashEntity(hash));
+    }
+
+    @Transactional
+    public void markHashAsUnused(String hash) {
+        log.info("start markHashAsUnused");
+        hashRepository.save(new HashEntity(hash));
+        usedHashRepository.deleteById(hash);
     }
 }

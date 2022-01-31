@@ -17,4 +17,7 @@ public interface HashFeignService {
 
     @GetMapping("/hash/{hash}")
     Map<String, Object> markHashAsUsed(@PathVariable("hash") String hash);
+
+    @GetMapping("/hash/unused/{hash}")
+    Map<String, Object> markHashAsUnUsed(@PathVariable("hash") String hash);
 }

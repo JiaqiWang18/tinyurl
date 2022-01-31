@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/")
 public class UrlController {
 
-    private UrlService urlService;
+    private final UrlService urlService;
 
     public UrlController(UrlService urlService){
         this.urlService = urlService;
@@ -31,7 +34,7 @@ public class UrlController {
     public RedirectView retrieveOriginal(@PathVariable String hash){
         String originalUrl = urlService.retrieveOriginalUrl(hash);
         if(originalUrl == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "url not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "url not found or has expired");
         }
         return new RedirectView(originalUrl);
     }
@@ -40,6 +43,7 @@ public class UrlController {
     public Map<String, Object> createShortUrl(@RequestBody Map<String, String> reqBody){
         Map<String, Object> res = new HashMap<>();
 
+        // validate original url
         if(!reqBody.containsKey("original")){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "field original must be present!");
         }
@@ -47,8 +51,20 @@ public class UrlController {
         if(!UrlValidator.getInstance().isValid(originalUrl)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "url is invalid!");
         }
+
+        // validate date
+        LocalDate expireDate;
+        System.out.println(reqBody);
+        if(reqBody.containsKey("expireDate") && reqBody.get("expireDate") != null){
+            expireDate = LocalDate.parse(reqBody.get("expireDate").substring(0,10));
+            System.out.println(expireDate);
+        }else{
+            expireDate = LocalDate.now().plusYears(1);
+        }
+
         String shortenUrl;
 
+        // validate alias
         if(reqBody.containsKey("alias") && reqBody.get("alias") != null && reqBody.get("alias").trim().length() > 0){
             String alias = reqBody.get("alias").trim();
             if(alias.length() < 6 || alias.length() > 15 || UrlValidator.getInstance().isValid(alias)){
@@ -57,12 +73,12 @@ public class UrlController {
             if(alias.matches("^.*[^a-zA-Z0-9 ].*$")){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "alias must be alphanumeric");
             }
-            shortenUrl = urlService.customizeShortenUrl(originalUrl, alias);
+            shortenUrl = urlService.customizeShortenUrl(originalUrl, alias, expireDate);
             if(shortenUrl==null){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "alias in use, try another one");
             }
         }else{
-            shortenUrl = urlService.generateShortenUrl(originalUrl);
+            shortenUrl = urlService.generateShortenUrl(originalUrl, expireDate);
         }
         res.put("data", shortenUrl);
         return res;

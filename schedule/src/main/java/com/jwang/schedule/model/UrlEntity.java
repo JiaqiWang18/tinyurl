@@ -1,4 +1,4 @@
-package com.jwang.shortener.model;
+package com.jwang.schedule.model;
 
 
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor

@@ -14,9 +14,9 @@ import java.util.Random;
 public class GenerateNewHash {
     private static final Logger log = LoggerFactory.getLogger(GenerateNewHash.class);
 
-    HashRepository hashRepository;
+    private final HashRepository hashRepository;
 
-    UsedHashRepository usedHashRepository;
+    private final UsedHashRepository usedHashRepository;
 
     public GenerateNewHash(HashRepository hashRepository, UsedHashRepository usedHashRepository) {
         this.hashRepository = hashRepository;
