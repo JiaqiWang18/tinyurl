@@ -45,7 +45,7 @@ a {
 }
 
 .MuiPaper-root {
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .MuiButtonBase-root {
@@ -53,12 +53,7 @@ a {
 }
 
 .MuiAccordionDetails-root {
-  padding: none;
-}
-
-.MuiAccordionSummary-expandIconWrapper {
-  margin-left: auto;
-  margin-right: auto;
+  padding: none !important;
 }
 
 .MuiAccordionSummary-content {
