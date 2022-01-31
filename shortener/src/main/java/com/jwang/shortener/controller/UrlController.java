@@ -3,6 +3,7 @@ package com.jwang.shortener.controller;
 import com.jwang.shortener.service.UrlService;
 
 import org.apache.commons.validator.routines.UrlValidator;
+import org.apache.tomcat.jni.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public class UrlController {
     public RedirectView retrieveOriginal(@PathVariable String hash){
         String originalUrl = urlService.retrieveOriginalUrl(hash);
         if(originalUrl == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "url not found or has expired");
+            return new RedirectView("/error/url-not-found");
         }
         return new RedirectView(originalUrl);
     }
@@ -54,11 +55,13 @@ public class UrlController {
 
         // validate date
         LocalDate expireDate;
-        System.out.println(reqBody);
         if(reqBody.containsKey("expireDate") && reqBody.get("expireDate") != null){
             expireDate = LocalDate.parse(reqBody.get("expireDate").substring(0,10));
-            System.out.println(expireDate);
+            if(expireDate.isBefore(LocalDate.now())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "expiration date is invalid!");
+            }
         }else{
+            // default to one year
             expireDate = LocalDate.now().plusYears(1);
         }
 
