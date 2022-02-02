@@ -38,4 +38,8 @@ public class JwtUserDetailsService implements UserDetailsService {
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userDao.save(newUser);
     }
+
+    public boolean usernameExists(UserDTO user){
+        return userDao.findByUsername(user.getUsername()) != null;
+    }
 }

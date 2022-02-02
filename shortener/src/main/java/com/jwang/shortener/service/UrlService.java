@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,23 +28,23 @@ public class UrlService {
     }
 
     @Transactional
-    public String generateShortenUrl(String originalUrl, LocalDate expireDate){
+    public String generateShortenUrl(String originalUrl, LocalDate expireDate, String username){
         log.info("Start generateShortenUrl");
         String hash = (String) hashFeignService.retrieve().get("data");
         log.info("Retrieved a hash from hash service: "+hash);
-        urlRepository.save(new UrlEntity(hash, originalUrl, expireDate));
+        urlRepository.save(new UrlEntity(hash, originalUrl, expireDate, username));
         log.info("Saved hash and original to db");
         return hash;
     }
 
     @Transactional
-    public String customizeShortenUrl(String originalUrl, String hash, LocalDate expireDate){
+    public String customizeShortenUrl(String originalUrl, String hash, LocalDate expireDate, String username){
         log.info("Start customizeShortenUrl");
-        // if hash exists, it has been used
+        // if hash exists, it has been usedn
         if(urlRepository.existsById(hash)){
             return null;
         }else{
-            urlRepository.save(new UrlEntity(hash, originalUrl, expireDate));
+            urlRepository.save(new UrlEntity(hash, originalUrl, expireDate, username));
             // call hash service to mark this url as used and remove it if it has been auto generated
             hashFeignService.markHashAsUsed(hash);
             return hash;
@@ -65,5 +66,12 @@ public class UrlService {
             return urlEntity.get().getOriginalUrl();
         }
         return null;
+    }
+
+    @Transactional
+    public List<UrlEntity> getUserUrls(String username){
+        List<UrlEntity> userUrls = urlRepository.findUrlEntitiesByUsername(username);
+        userUrls.forEach(System.out::println);
+        return userUrls;
     }
 }

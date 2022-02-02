@@ -1,0 +1,18 @@
+jwt:
+  secret: ${URL_AUTH_SECRET}
+spring:
+  datasource:
+    url: ${URL_JPA}
+    username: ${URL_DB_USERNAME}
+    password: ${URL_DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+  main:
+    allow-circular-references: true
+  application:
+    name: auth-depl
+server:
+  port: 8080
+  error:
+    include-message: always

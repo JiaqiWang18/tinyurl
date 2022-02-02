@@ -2,23 +2,16 @@ package com.jwang.shortener.controller;
 
 import com.jwang.shortener.service.UrlService;
 
+import com.jwang.shortener.util.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.apache.tomcat.jni.Local;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +22,11 @@ public class UrlController {
 
     private final UrlService urlService;
 
-    public UrlController(UrlService urlService){
+    private final JwtTokenUtil jwtTokenUtil;
+
+    public UrlController(UrlService urlService, JwtTokenUtil jwtTokenUtil){
         this.urlService = urlService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @GetMapping("/{hash}")
@@ -44,8 +40,21 @@ public class UrlController {
     }
 
     @PostMapping("/url/generate")
-    public Map<String, Object> createShortUrl(@RequestBody Map<String, String> reqBody){
+    public Map<String, Object> createShortUrl(@RequestBody Map<String, String> reqBody, @RequestHeader(name="Authorization") String requestTokenHeader){
         Map<String, Object> res = new HashMap<>();
+        String username = null;
+
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+            String token = requestTokenHeader.substring(7);
+            if(jwtTokenUtil.isTokenExpired(token)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "session timeout, please log in again");
+            }
+            try {
+                username = jwtTokenUtil.getUsernameFromToken(token);
+            }  catch (ExpiredJwtException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "session timeout, please log in again");
+            }
+        }
 
         // validate original url
         if(!reqBody.containsKey("original")){
@@ -79,12 +88,12 @@ public class UrlController {
             if(alias.matches("^.*[^a-zA-Z0-9 ].*$")){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "alias must be alphanumeric");
             }
-            shortenUrl = urlService.customizeShortenUrl(originalUrl, alias, expireDate);
+            shortenUrl = urlService.customizeShortenUrl(originalUrl, alias, expireDate, username);
             if(shortenUrl==null){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "alias in use, try another one");
             }
         }else{
-            shortenUrl = urlService.generateShortenUrl(originalUrl, expireDate);
+            shortenUrl = urlService.generateShortenUrl(originalUrl, expireDate, username);
         }
         res.put("data", shortenUrl);
         return res;

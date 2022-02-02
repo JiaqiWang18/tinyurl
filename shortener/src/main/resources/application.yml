@@ -1,3 +1,5 @@
+jwt:
+  secret: ${URL_AUTH_SECRET}
 spring:
   application:
     name: shortener-depl
