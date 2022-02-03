@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { useState } from "react";
 import axios from "axios";
 
@@ -8,7 +9,21 @@ export default ({ url, method, body, onSuccess }) => {
     try {
       setErrors(null);
       setIsFetching(true);
-      const response = await axios[method](url, { ...body, ...props });
+      const response = await axios[method](
+        url,
+        {
+          ...body,
+          ...props,
+        },
+        {
+          headers: {
+            Authorization:
+              localStorage.getItem("token") !== null
+                ? `Bearer ${localStorage.getItem("token")}`
+                : null,
+          },
+        }
+      );
       setIsFetching(false);
       if (onSuccess) {
         onSuccess(response.data);

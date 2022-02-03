@@ -27,7 +27,7 @@ export default function UrlForm() {
   const [expanded, setExpanded] = React.useState(false);
 
   const { doRequest, errors, isFetching } = useRequest({
-    url: "/url/generate",
+    url: "http://127.0.0.1:88/url/generate",
     method: "post",
     body: {
       original: originalUrl,
@@ -35,10 +35,29 @@ export default function UrlForm() {
       expireDate,
     },
     onSuccess: (data: any) => {
-      setShortenedUrl(location.host + "/" + data.data);
+      const shortenedUrl = location.host + "/" + data.data.hash;
+      setShortenedUrl(shortenedUrl);
       setDialogOpen(true);
+      saveLocalStorage(data.data.hash, originalUrl, data.data.expireDate);
     },
   });
+
+  const saveLocalStorage = (
+    hash: string,
+    originalUrl: string,
+    expireDate: Date | null
+  ) => {
+    console.log(expireDate);
+    if (localStorage.getItem("localUrls") !== null) {
+      //@ts-ignore
+      const urls: Array<any> = JSON.parse(localStorage.getItem("localUrls"));
+      urls.push({ hash, originalUrl, expireDate });
+      localStorage.setItem("localUrls", JSON.stringify(urls));
+    } else {
+      const urls = [{ hash, originalUrl, expireDate }];
+      localStorage.setItem("localUrls", JSON.stringify(urls));
+    }
+  };
 
   const generateShortUrl = async () => {
     doRequest();

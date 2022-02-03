@@ -1,17 +1,23 @@
 import type { NextPage } from "next";
-import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import UrlForm from "../components/UrlForm";
 
+import { toast, ToastContainer } from "react-toastify";
+
 const Home: NextPage = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    toast.success(router.query.message);
+  }, [router.query.message]);
+
   return (
     <div>
-      <Head>
-        <title>tinyurl</title>
-        <link rel="icon" href="/app/favicon.ico" />
-      </Head>
       <main className="container d-flex" style={{ height: "100vh" }}>
         <UrlForm />
       </main>
+      <ToastContainer />
     </div>
   );
 };

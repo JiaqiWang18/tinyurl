@@ -59,3 +59,19 @@ a {
 .MuiAccordionSummary-content {
   width: 100%;
 }
+
+.nav-menu-container {
+  position: absolute;
+  right: 0;
+  margin: 5px;
+  z-index: 1500;
+}
+
+.btn-primary {
+  color: white;
+  margin: 3px;
+}
+
+.side-bar-container {
+  min-width: 600px;
+}
