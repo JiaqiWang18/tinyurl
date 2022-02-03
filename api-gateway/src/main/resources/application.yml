@@ -15,6 +15,12 @@ spring:
             allowedHeaders: "*"
         add-to-simple-url-handler-mapping: true
       routes:
+        - id: auth-depl
+          uri: lb://auth-depl
+          predicates:
+            - Path=/auth/**
+          filters:
+             - RewritePath=/auth(?<segment>/?.*), $\{segment}
         - id: shortener-depl
           uri: lb://shortener-depl
           predicates:

@@ -1,6 +1,8 @@
 package com.jwang.urlshortener.auth.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
@@ -19,13 +21,15 @@ public class ValidationHandler extends ResponseEntityExceptionHandler{
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        Map<String, String> errors = new HashMap<>();
+        Map<String, List<String>> res = new HashMap<>();
+        List<String> errors = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach((error) ->{
 
-            String fieldName = ((FieldError) error).getField();
+            //String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
-            errors.put(fieldName, message);
+            errors.add(message);
         });
-        return new ResponseEntity<Object>(errors, HttpStatus.BAD_REQUEST);
+        res.put("message", errors);
+        return new ResponseEntity<Object>(res, HttpStatus.BAD_REQUEST);
     }
 }

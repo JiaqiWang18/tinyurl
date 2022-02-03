@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -36,7 +40,7 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
+    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest) {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
@@ -51,7 +55,11 @@ public class JwtAuthenticationController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDTO user) {
         if(userDetailsService.usernameExists(user)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is used, try another");
+            Map<String, List<String>> res = new HashMap<>();
+            List<String> errors = new ArrayList<>();
+            errors.add("username is in use");
+            res.put("message",errors);
+            return new ResponseEntity<Object>(res,HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(userDetailsService.save(user));
     }

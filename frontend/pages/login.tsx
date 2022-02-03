@@ -35,7 +35,7 @@ export default function Login() {
     };
 
     await axios
-      .post("http://127.0.0.1:8080/authenticate", formData)
+      .post("http://127.0.0.1:88/auth/authenticate", formData)
       .then(({ data }) => {
         localStorage.setItem("token", data.token);
         Router.push({

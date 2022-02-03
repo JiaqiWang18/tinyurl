@@ -6,10 +6,7 @@ import com.jwang.shortener.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
@@ -28,16 +25,13 @@ public class UserUrlController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    @GetMapping("/urls")
+    @PostMapping("/urls")
     public Map<String, Object> getUserUrls(@RequestHeader(name="Authorization") String requestTokenHeader){
         System.out.println(requestTokenHeader);
         String username;
         Map<String, Object> res = new HashMap<>();
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             String token = requestTokenHeader.substring(7);
-            if(jwtTokenUtil.isTokenExpired(token)){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "session timeout, please log in again");
-            }
             try {
                 username = jwtTokenUtil.getUsernameFromToken(token);
             }  catch (ExpiredJwtException e) {

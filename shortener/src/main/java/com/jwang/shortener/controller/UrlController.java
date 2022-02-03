@@ -46,13 +46,13 @@ public class UrlController {
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             String token = requestTokenHeader.substring(7);
-            if(jwtTokenUtil.isTokenExpired(token)){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "session timeout, please log in again");
-            }
             try {
                 username = jwtTokenUtil.getUsernameFromToken(token);
+                System.out.println(username);
             }  catch (ExpiredJwtException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "session timeout, please log in again");
+            } catch (Exception e){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "unknown error occurred, please try again");
             }
         }
 
@@ -95,7 +95,10 @@ public class UrlController {
         }else{
             shortenUrl = urlService.generateShortenUrl(originalUrl, expireDate, username);
         }
-        res.put("data", shortenUrl);
+        Map<String, Object> data = new HashMap<>();
+        data.put("hash",shortenUrl);
+        data.put("expireDate",expireDate);
+        res.put("data", data);
         return res;
     }
 }

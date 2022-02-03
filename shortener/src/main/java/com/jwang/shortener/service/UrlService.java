@@ -70,8 +70,7 @@ public class UrlService {
 
     @Transactional
     public List<UrlEntity> getUserUrls(String username){
-        List<UrlEntity> userUrls = urlRepository.findUrlEntitiesByUsername(username);
-        userUrls.forEach(System.out::println);
-        return userUrls;
+        log.info("Start getUserUrls for: " + username);
+        return urlRepository.findUrlEntitiesByUsername(username);
     }
 }
