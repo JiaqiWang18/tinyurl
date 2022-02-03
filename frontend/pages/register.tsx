@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import Router from "next/router";
+import api from "../api";
 
 export default function Register() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +28,7 @@ export default function Register() {
       return;
     }
     await axios
-      .post("/auth/register", formData)
+      .post(api + "/auth/register", formData)
       .then(() => {
         Router.push({
           pathname: "/login",

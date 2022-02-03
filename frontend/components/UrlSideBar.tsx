@@ -2,6 +2,10 @@ import * as React from "react";
 import Drawer from "@mui/material/Drawer";
 import { Divider } from "@mui/material";
 import useRequest from "../hooks/use-request";
+import api from "../api";
+import { useAppDispatch } from "../hooks";
+import { setLogIn } from "../state/slices/loginSlice";
+import Router from "next/router";
 
 interface UrlsSideBar {
   open: boolean;
@@ -9,6 +13,7 @@ interface UrlsSideBar {
 }
 
 export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
+  const dispatch = useAppDispatch();
   const [urls, setUrls] = React.useState<
     {
       hash: string;
@@ -19,11 +24,22 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
   >([]);
 
   const { doRequest, errors, isFetching } = useRequest({
-    url: "/user/urls",
+    url: api + "/user/urls",
     body: {},
     method: "post",
     onSuccess: (data: any) => {
       setUrls(data.data);
+    },
+    onError: () => {
+      setUrls([]);
+      localStorage.removeItem("token");
+      dispatch(setLogIn(false));
+      Router.push({
+        pathname: "/login",
+        query: {
+          message: "Session timed out, please login",
+        },
+      });
     },
   });
 
@@ -46,8 +62,8 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
       <div className="row">
         <div className="col">
           <h3>
-            <a href={`http://${location.host + "/" + url.hash}`}>
-              {location.host + "/" + url.hash}
+            <a href={`http://${api + "/" + url.hash}`}>
+              {api + "/" + url.hash}
             </a>
           </h3>
         </div>
@@ -82,6 +98,9 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
                 <Divider style={{ color: "black", width: "100%" }} />
                 {errors}
                 {renderedUrls}
+                {urls.length === 0 && (
+                  <p className="mx-auto mt-5">No url found</p>
+                )}
               </div>
             </div>
           </div>

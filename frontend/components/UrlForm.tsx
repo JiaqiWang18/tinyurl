@@ -16,6 +16,7 @@ import { DesktopDatePicker } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import BuildIcon from "@mui/icons-material/Build";
+import api from "../api";
 
 export default function UrlForm() {
   const [originalUrl, setUrl] = React.useState("");
@@ -27,7 +28,7 @@ export default function UrlForm() {
   const [expanded, setExpanded] = React.useState(false);
 
   const { doRequest, errors, isFetching } = useRequest({
-    url: "/url/generate",
+    url: api + "/url/generate",
     method: "post",
     body: {
       original: originalUrl,
@@ -35,11 +36,12 @@ export default function UrlForm() {
       expireDate,
     },
     onSuccess: (data: any) => {
-      const shortenedUrl = location.host + "/" + data.data.hash;
+      const shortenedUrl = api + "/" + data.data.hash;
       setShortenedUrl(shortenedUrl);
       setDialogOpen(true);
       saveLocalStorage(data.data.hash, originalUrl, data.data.expireDate);
     },
+    onError: () => {},
   });
 
   const saveLocalStorage = (

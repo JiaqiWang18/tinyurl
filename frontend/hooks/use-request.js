@@ -2,7 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default ({ url, method, body, onSuccess }) => {
+export default ({ url, method, body, onSuccess, onError }) => {
   const [errors, setErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const doRequest = async (props = {}) => {
@@ -31,6 +31,9 @@ export default ({ url, method, body, onSuccess }) => {
       return response.data;
     } catch ({ response }) {
       setIsFetching(false);
+      if (onError) {
+        onError(response);
+      }
       setErrors(
         <div className="alert alert-danger mt-2">
           <h4>Ooops...</h4>

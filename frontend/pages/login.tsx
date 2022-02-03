@@ -11,13 +11,19 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Router from "next/router";
+import api from "../api";
+import { useAppDispatch } from "../hooks";
+import { setLogIn } from "../state/slices/loginSlice";
 
 export default function Login() {
+  const dispatch = useAppDispatch();
+
   const router = useRouter();
 
   React.useEffect(() => {
     toast.success(router.query.message);
     if (localStorage.getItem("token") !== null) {
+      dispatch(setLogIn(true));
       Router.push({
         pathname: "/",
         query: { message: "already logged in" },
@@ -35,17 +41,18 @@ export default function Login() {
     };
 
     await axios
-      .post("/auth/authenticate", formData)
+      .post(api + "/auth/authenticate", formData)
       .then(({ data }) => {
         localStorage.setItem("token", data.token);
+        dispatch(setLogIn(true));
         Router.push({
           pathname: "/",
-          query: { message: "log in succeed" },
         });
       })
       .catch(({ response }) => {
         if (!response.data.message) {
           toast.error("invalid credentials");
+          dispatch(setLogIn(false));
           return;
         }
         response.data.message.map((pair: string) => {

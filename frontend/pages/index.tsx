@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import UrlForm from "../components/UrlForm";
 
 import { toast, ToastContainer } from "react-toastify";
+import NavBar from "../components/NavBar";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
+      <NavBar />
       <main className="container d-flex" style={{ height: "100vh" }}>
         <UrlForm />
       </main>
