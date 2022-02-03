@@ -16,3 +16,9 @@ docker push jiaqiwang118/url-schedule-service
 
 docker buildx build --platform linux/amd64 -t jiaqiwang118/url-frontend:latest .
 docker push jiaqiwang118/url-frontend:latest
+
+docker buildx build --platform linux/amd64 -t jiaqiwang118/url-auth-service:latest .
+docker push jiaqiwang118/url-auth-service:latest
+
+kubectl create secret generic urljpa --from-literal=URL_JPA="jdbc:mysql://snn-stats.cld13dn3roer.us-west-1.rds.amazonaws.com/url-shortener-auth?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false"
+kubectl create secret generic urlauthsecret --from-literal=URL_AUTH_SECRET=Lxh730101!

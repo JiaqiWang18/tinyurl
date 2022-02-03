@@ -22,6 +22,11 @@ spec:
                 secretKeyRef:
                   name: mongouri
                   key: uri
+            - name: URL_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: urlauthsecret
+                  key: URL_AUTH_SECRET
 ---
 apiVersion: v1
 kind: Service

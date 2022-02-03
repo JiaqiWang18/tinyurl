@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-depl
+  template:
+    metadata:
+      labels:
+        app: auth-depl
+    spec:
+      containers:
+        - name: auth-depl
+          image: jiaqiwang118/url-auth-service
+          env:
+            - name: URL_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: urlauthsecret
+                  key: URL_AUTH_SECRET
+            - name: URL_JPA
+              valueFrom:
+                secretKeyRef:
+                  name: urljpa
+                  key: URL_JPA
+            - name: URL_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: urldbusername
+                  key: URL_DB_USERNAME
+            - name: URL_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: urldbpassword
+                  key: URL_DB_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-depl
+  labels:
+    app: auth-depl
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    app: auth-depl
