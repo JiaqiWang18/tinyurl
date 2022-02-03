@@ -27,7 +27,7 @@ export default function UrlForm() {
   const [expanded, setExpanded] = React.useState(false);
 
   const { doRequest, errors, isFetching } = useRequest({
-    url: "http://127.0.0.1:88/url/generate",
+    url: "/url/generate",
     method: "post",
     body: {
       original: originalUrl,

@@ -27,7 +27,7 @@ export default function Register() {
       return;
     }
     await axios
-      .post("http://127.0.0.1:88/auth/authenticate", formData)
+      .post("/auth/authenticate", formData)
       .then(() => {
         Router.push({
           pathname: "/login",

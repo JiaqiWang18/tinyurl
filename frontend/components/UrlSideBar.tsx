@@ -19,7 +19,7 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
   >([]);
 
   const { doRequest, errors, isFetching } = useRequest({
-    url: "http://127.0.0.1:88/user/urls",
+    url: "/user/urls",
     body: {},
     method: "post",
     onSuccess: (data: any) => {
