@@ -27,7 +27,7 @@ export default function Register() {
       return;
     }
     await axios
-      .post("/auth/authenticate", formData)
+      .post("/auth/register", formData)
       .then(() => {
         Router.push({
           pathname: "/login",
