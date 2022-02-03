@@ -46,7 +46,7 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
       <div className="row">
         <div className="col">
           <h3>
-            <a href={`${location.host + "/" + url.hash}`}>
+            <a href={`http://${location.host + "/" + url.hash}`}>
               {location.host + "/" + url.hash}
             </a>
           </h3>
