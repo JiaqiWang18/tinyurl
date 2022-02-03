@@ -62,9 +62,7 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
       <div className="row">
         <div className="col">
           <h3>
-            <a href={`http://${api + "/" + url.hash}`}>
-              {api + "/" + url.hash}
-            </a>
+            <a href={api + "/" + url.hash}>{api + "/" + url.hash}</a>
           </h3>
         </div>
         <div className="col">
