@@ -33,6 +33,7 @@ The backend is developed with a distributed microservice architecture, consistin
 
 ### Tech Stack
 * **Spring Boot** to develop each invidual service
+* **Spring Cloud Gateway** to develop the api gateway
 * **Spring Cloud OpenFeign** for cross-service communication
 * **Spring Cloud Kubernetes** to integrate with kubernetes for service discovery
 * **Spring Cloud Netflix Eureka** for service discovery in development environment
