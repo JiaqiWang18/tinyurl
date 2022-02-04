@@ -18,6 +18,7 @@ The backend app is splitted into 5 different microservies each has its own job. 
 ## Backend
 ### Architecture
 The backend is developed with a distributed microservice architecture, consisting of microservices developed with the Java Spring framework and delpoyed onto a Google Kubernetes Engine cluster.
+![url-backend](https://user-images.githubusercontent.com/37493948/152458994-f2c87aa3-215b-449f-8436-9c37a0bfd0f6.jpg)
 
 ### Service Responsibilities
 *  **Hash Service** manages a collection of pregenerated hashes to be consumed by the **Shortening Service**, also maintains a collection of used hashes.
@@ -41,3 +42,7 @@ The backend is developed with a distributed microservice architecture, consistin
 
 ## Frontend
 The frontend is a Next JS application with Redux Toolkit for state management
+
+## Deployment
+Since this app consists of multiple standalone services, kubernetes is a good option for deployment for its features such as service registration, discovery, loadbalancing as well as separate scaling.
+![url-k8s](https://user-images.githubusercontent.com/37493948/152459151-0ee10670-0297-4c6e-968c-35a95c84d107.jpg)
