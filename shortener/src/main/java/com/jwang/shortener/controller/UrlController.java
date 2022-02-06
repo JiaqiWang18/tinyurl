@@ -50,9 +50,9 @@ public class UrlController {
                 username = jwtTokenUtil.getUsernameFromToken(token);
                 System.out.println(username);
             }  catch (ExpiredJwtException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "session timeout, please log in again");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "session timeout, please log in again");
             } catch (Exception e){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "unknown error occurred, please try again");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unknown error occurred, please try again");
             }
         }
 
