@@ -10,8 +10,11 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    toast.success(router.query.message);
-  }, [router.query.message]);
+    toast(router.query.message, {
+      // @ts-ignore
+      type: router.query.type,
+    });
+  }, [router.query]);
 
   return (
     <div>

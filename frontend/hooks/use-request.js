@@ -1,8 +1,13 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setLogIn } from "../state/slices/loginSlice";
+import Router from "next/router";
 
 export default ({ url, method, body, onSuccess, onError }) => {
+  const dispatch = useDispatch();
+
   const [errors, setErrors] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const doRequest = async (props = {}) => {
@@ -31,6 +36,17 @@ export default ({ url, method, body, onSuccess, onError }) => {
       return response.data;
     } catch ({ response }) {
       setIsFetching(false);
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        dispatch(setLogIn(false));
+        Router.push({
+          pathname: "/login",
+          query: {
+            message: response.data.message,
+            type: "error",
+          },
+        });
+      }
       if (onError) {
         onError(response);
       }

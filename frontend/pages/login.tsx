@@ -21,15 +21,21 @@ export default function Login() {
   const router = useRouter();
 
   React.useEffect(() => {
-    toast.success(router.query.message);
+    toast(router.query.message, {
+      // @ts-ignore
+      type: router.query.type,
+    });
     if (localStorage.getItem("token") !== null) {
       dispatch(setLogIn(true));
       Router.push({
         pathname: "/",
-        query: { message: "already logged in" },
+        query: {
+          message: "already logged in",
+          type: "error",
+        },
       });
     }
-  }, [router.query.message]);
+  }, [router.query]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -117,6 +123,13 @@ export default function Login() {
               >
                 Log In
               </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href="/app" variant="body1">
+                    Proceed without log in
+                  </Link>
+                </Grid>
+              </Grid>
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Link href="/app/register" variant="body2">

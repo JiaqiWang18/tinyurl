@@ -32,7 +32,7 @@ export default function Register() {
       .then(() => {
         Router.push({
           pathname: "/login",
-          query: { message: "register success" },
+          query: { message: "register success", type: "success" },
         });
       })
       .catch(({ response }) => {

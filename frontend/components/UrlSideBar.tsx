@@ -3,9 +3,6 @@ import Drawer from "@mui/material/Drawer";
 import { Divider } from "@mui/material";
 import useRequest from "../hooks/use-request";
 import api from "../api";
-import { useAppDispatch } from "../hooks";
-import { setLogIn } from "../state/slices/loginSlice";
-import Router from "next/router";
 
 interface UrlsSideBar {
   open: boolean;
@@ -13,7 +10,6 @@ interface UrlsSideBar {
 }
 
 export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
-  const dispatch = useAppDispatch();
   const [urls, setUrls] = React.useState<
     {
       hash: string;
@@ -23,7 +19,7 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
     }[]
   >([]);
 
-  const { doRequest, errors, isFetching } = useRequest({
+  const { doRequest, errors } = useRequest({
     url: api + "/user/urls",
     body: {},
     method: "post",
@@ -32,14 +28,6 @@ export default function UrlsSideBar({ open, setOpen }: UrlsSideBar) {
     },
     onError: () => {
       setUrls([]);
-      localStorage.removeItem("token");
-      dispatch(setLogIn(false));
-      Router.push({
-        pathname: "/login",
-        query: {
-          message: "Session timed out, please login",
-        },
-      });
     },
   });
 

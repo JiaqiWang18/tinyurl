@@ -49,7 +49,6 @@ export default function UrlForm() {
     originalUrl: string,
     expireDate: Date | null
   ) => {
-    console.log(expireDate);
     if (localStorage.getItem("localUrls") !== null) {
       //@ts-ignore
       const urls: Array<any> = JSON.parse(localStorage.getItem("localUrls"));
