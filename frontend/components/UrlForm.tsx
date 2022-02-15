@@ -92,7 +92,7 @@ export default function UrlForm() {
       <div className="form">
         <div className="mb-3">
           <h1 className="">
-            TinyURL <i className="fas fa-link"></i>
+            TinyURL! <i className="fas fa-link"></i>
           </h1>
         </div>
         {isFetching ? (
