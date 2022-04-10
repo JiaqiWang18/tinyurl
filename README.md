@@ -1,5 +1,4 @@
 # TinyURL
-## https://tinyurl.jackywang.us/app
 
 ## Features
 A url shortening application with the following fearures.
